@@ -13,15 +13,25 @@ import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 @Service
 public class ProductServiceImpl implements ProductService {
     
+    // Repository for product data persistence
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * Creates a new product
+     * @param product The product to create
+     * @return The created product
+     */
     @Override
     public Product create(Product product) {
         productRepository.create(product);
         return product;
     }
 
+    /**
+     * Retrieves all products
+     * @return List of all products
+     */
     @Override
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
@@ -30,6 +40,11 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 
+    /**
+     * Updates an existing product
+     * @param product The product with updated information
+     * @return The updated product if found, null otherwise
+     */
     @Override
     public Product edit(Product product) {
         List<Product> products = findAll();
@@ -43,6 +58,10 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    /**
+     * Deletes a product
+     * @param id The ID of the product to delete
+     */
     @Override
     public void delete(String id) {
         productRepository.delete(id);

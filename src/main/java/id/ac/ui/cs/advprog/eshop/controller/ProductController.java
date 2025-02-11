@@ -18,9 +18,15 @@ import id.ac.ui.cs.advprog.eshop.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 
+    // Inject the product service
     @Autowired
     private ProductService service;
 
+    /**
+     * Handles GET request to show the create product form
+     * @param model Model object to pass data to view
+     * @return View name for create product page
+     */
     @GetMapping("/create")
     public String createProductPage(Model model) {
         Product product = new Product();
@@ -28,12 +34,23 @@ public class ProductController {
         return "createProduct";
     }
 
+    /**
+     * Handles POST request to create a new product
+     * @param product Product object from form submission
+     * @param model Model object to pass data to view
+     * @return Redirects to product list page
+     */
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
         service.create(product);
         return "redirect:list";
     }
 
+    /**
+     * Handles GET request to show list of all products
+     * @param model Model object to pass data to view
+     * @return View name for product list page
+     */
     @GetMapping("/list")
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
@@ -41,6 +58,12 @@ public class ProductController {
         return "productList";
     }
 
+    /**
+     * Handles GET request to show the edit product form
+     * @param id Product ID to edit
+     * @param model Model object to pass data to view
+     * @return View name for edit product page or redirects to list if product not found
+     */
     @GetMapping("/edit")
     public String editProductPage(@RequestParam String id, Model model) {
         List<Product> products = service.findAll();
@@ -53,12 +76,23 @@ public class ProductController {
         return "redirect:list";
     }
 
+    /**
+     * Handles POST request to update an existing product
+     * @param product Updated product object from form submission
+     * @param model Model object to pass data to view
+     * @return Redirects to product list page
+     */
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product, Model model) {
         service.edit(product);
         return "redirect:list";
     }
 
+    /**
+     * Handles GET request to delete a product
+     * @param id Product ID to delete
+     * @return Redirects to product list page
+     */
     @GetMapping("/delete")
     public String deleteProduct(@RequestParam String id) {
         service.delete(id);
