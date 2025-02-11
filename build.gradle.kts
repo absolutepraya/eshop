@@ -37,3 +37,7 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.bootRun {
+    sourceResources(sourceSets["main"])
+}
