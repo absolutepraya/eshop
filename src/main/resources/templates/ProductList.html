@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-
 <html
 	lang="en"
 	xmlns:th="http://www.thymeleaf.org"
 >
 	<head>
 		<meta charset="UTF-8" />
-
-		<title>Products List</title>
-
+		<title>Product List</title>
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -16,11 +13,9 @@
 			crossorigin="anonymous"
 		/>
 	</head>
-
 	<body>
 		<div class="container my-2">
-			<h2>Product' List</h2>
-
+			<h2>Products List</h2>
 			<a
 				th:href="@{/product/create}"
 				class="btn btn-primary btn-sm mb-3"
@@ -34,16 +29,21 @@
 				<thead>
 					<tr>
 						<th scope="col">Product Name</th>
-
 						<th scope="col">Quantity</th>
+						<th scope="col">Actions</th>
 					</tr>
 				</thead>
-
 				<tbody>
 					<tr th:each="product: ${products}">
 						<td th:text="${product.productName}"></td>
-
 						<td th:text="${product.productQuantity}"></td>
+						<td>
+							<a
+								th:href="@{/product/edit(id=${product.productId})}"
+								class="btn btn-primary btn-sm"
+								>Edit</a
+							>
+						</td>
 					</tr>
 				</tbody>
 			</table>
