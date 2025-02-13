@@ -28,28 +28,34 @@
 			>
 				<div class="form-group">
 					<label for="nameInput">Name</label>
-
 					<input
 						th:field="*{productName}"
 						type="text"
 						class="form-control mb-4 col-4"
 						id="nameInput"
 						placeholder="Enter product's name"
-						required
 					/>
+					<div
+						class="text-danger"
+						th:if="${#fields.hasErrors('productName')}"
+						th:errors="*{productName}"
+					></div>
 				</div>
 
 				<div class="form-group">
 					<label for="quantityInput">Quantity</label>
-
 					<input
 						th:field="*{productQuantity}"
-						type="text"
+						type="number"
 						class="form-control mb-4 col-4"
 						id="quantityInput"
-						placeholder="Enter product's name"
-						required
+						placeholder="Enter product's quantity"
 					/>
+					<div
+						class="text-danger"
+						th:if="${#fields.hasErrors('productQuantity')}"
+						th:errors="*{productQuantity}"
+					></div>
 				</div>
 
 				<button
