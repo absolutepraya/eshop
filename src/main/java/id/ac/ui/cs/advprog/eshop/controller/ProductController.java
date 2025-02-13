@@ -2,6 +2,8 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +43,12 @@ public class ProductController {
      * @return Redirects to product list page
      */
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product, Model model) {
+    public String createProductPost(@Valid @ModelAttribute Product product, 
+                                  BindingResult bindingResult, 
+                                  Model model) {
+        if (bindingResult.hasErrors()) {
+            return "createProduct";
+        }
         service.create(product);
         return "redirect:list";
     }
@@ -83,7 +90,12 @@ public class ProductController {
      * @return Redirects to product list page
      */
     @PostMapping("/edit")
-    public String editProductPost(@ModelAttribute Product product, Model model) {
+    public String editProductPost(@Valid @ModelAttribute Product product, 
+                                BindingResult bindingResult, 
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            return "editProduct";
+        }
         service.edit(product);
         return "redirect:list";
     }
