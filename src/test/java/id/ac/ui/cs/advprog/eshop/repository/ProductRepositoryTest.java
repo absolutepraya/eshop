@@ -101,6 +101,42 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testEditSecondProduct() {
+        // Create first product
+        Product product1 = new Product();
+        product1.setProductId("26fc7ab5-8e80-44d7-9fdc-2a804e1ede9f");
+        product1.setProductName("First Product");
+        product1.setProductQuantity(100);
+        productRepository.create(product1);
+
+        // Create second product
+        Product product2 = new Product();
+        product2.setProductId("b6104af2-8a6e-40b8-aec5-396cdae48471");
+        product2.setProductName("Second Product");
+        product2.setProductQuantity(200);
+        productRepository.create(product2);
+
+        // Update second product
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("b6104af2-8a6e-40b8-aec5-396cdae48471");
+        updatedProduct.setProductName("Updated Second Product");
+        updatedProduct.setProductQuantity(300);
+        
+        Product result = productRepository.edit(updatedProduct);
+        
+        // Verify the update
+        assertNotNull(result);
+        assertEquals(updatedProduct.getProductName(), result.getProductName());
+        assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
+        
+        // Verify first product remained unchanged
+        Iterator<Product> productIterator = productRepository.findAll();
+        Product firstProduct = productIterator.next();
+        assertEquals("First Product", firstProduct.getProductName());
+        assertEquals(100, firstProduct.getProductQuantity());
+    }
+
+    @Test
     void testEditNonExistentProduct() {
         Product nonExistentProduct = new Product();
         nonExistentProduct.setProductId("non-existent-id");
