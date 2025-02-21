@@ -244,3 +244,11 @@ As you can see, there are 15 issues which need to be fixed. I fixed the issues b
   - Added a nested comment explaining why a method is empty.
 - `ProductServiceImplTest.java`
   - Removed unused imports.
+
+After fixing the issues, the code quality improved significantly. The result is:
+
+![SonarCloud Report](readme/4.webp)
+
+![SonarCloud Report](readme/5.webp)
+
+The project now has 0 issues.
