@@ -11,10 +11,6 @@ plugins {
     id("org.sonarqube") version "6.0.1.5171"
 }
 
-license {
-    header = project.file("LICENSE")
-}
-
 sonar {
 	properties {
 		property("sonar.projectKey", "absolutepraya_eshop")
