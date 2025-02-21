@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+# Restrict permissions for GITHUB_TOKEN
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Run tests

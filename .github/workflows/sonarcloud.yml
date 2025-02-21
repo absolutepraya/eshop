@@ -8,6 +8,10 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   sonarcloud:
     name: SonarCloud Scan
