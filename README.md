@@ -223,3 +223,24 @@ After fixing the tests, the coverage increased to **100%** for both code instruc
 
 ![Jacoco Report](readme/2.webp)
 
+Then, I installed SonarCloud to analyze the code quality. The result is:
+
+![SonarCloud Report](readme/3.webp)
+
+As you can see, there are 15 issues which need to be fixed. I fixed the issues by following the suggestions from SonarCloud. These includes changes in the following files:
+
+- `ProductController.java`
+  - Defined a constant instead of duplicating this literal "redirect:list" 4 times.
+- `EshopApplicationTests.java`
+  - Added at least 1 test case to testMain() method.
+  - Added a nested comment explaining why a method is empty.
+- `ProductControllerTest.java`
+  - Removed unused imports.
+- `CreateProductFunctionalTest.java`
+  - Removed the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.
+- `HomePageFunctionalTest.java`
+  - Removed the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.
+- `ProductRepositoryTest.java`
+  - Added a nested comment explaining why a method is empty.
+- `ProductServiceImplTest.java`
+  - Removed unused imports.
