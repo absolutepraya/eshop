@@ -16,6 +16,12 @@ sonar {
 		property("sonar.projectKey", "absolutepraya_eshop")
 		property("sonar.organization", "absolutepraya")
 		property("sonar.host.url", "https://sonarcloud.io")
+		property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test/java")
+        property("sonar.java.binaries", "build/classes/java/main")
+        property("sonar.java.test.binaries", "build/classes/java/test")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.java.libraries", "build/libs/*.jar")
 	}
 }
 
