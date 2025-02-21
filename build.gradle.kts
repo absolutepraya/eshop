@@ -62,9 +62,9 @@ dependencies {
 }
 
 tasks.test {
-    filter {
-        excludeTestsMatching("*FunctionalTest")
-    }
+    // filter {
+    //     excludeTestsMatching("*FunctionalTest")
+    // }
 
 	finalizedBy(tasks.jacocoTestReport)
 }
