@@ -20,6 +20,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/product")
 public class ProductController {
 
+    private static final String REDIRECT_LIST = "redirect:list";
+
     // Inject the product service
     @Autowired
     private ProductService service;
@@ -50,7 +52,7 @@ public class ProductController {
             return "createProduct";
         }
         service.create(product);
-        return "redirect:list";
+        return REDIRECT_LIST;
     }
 
     /**
@@ -80,7 +82,7 @@ public class ProductController {
                 return "editProduct";
             }
         }
-        return "redirect:list";
+        return REDIRECT_LIST;
     }
 
     /**
@@ -97,7 +99,7 @@ public class ProductController {
             return "editProduct";
         }
         service.edit(product);
-        return "redirect:list";
+        return REDIRECT_LIST;
     }
 
     /**
@@ -108,6 +110,6 @@ public class ProductController {
     @GetMapping("/delete")
     public String deleteProduct(@RequestParam String id) {
         service.delete(id);
-        return "redirect:list";
+        return REDIRECT_LIST;
     }
 }

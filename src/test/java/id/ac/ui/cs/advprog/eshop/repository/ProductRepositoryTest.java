@@ -22,6 +22,8 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        /* This method is empty because ProductRepository is stateless and doesn't require
+        any setup between tests. Each test manages its own product data. */
     }
 
     @Test

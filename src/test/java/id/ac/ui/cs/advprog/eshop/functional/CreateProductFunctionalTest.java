@@ -37,7 +37,7 @@ class CreateProductFunctionalTest {
     }
 
     @Test
-    void createProduct_isSuccessful(ChromeDriver driver) throws Exception {
+    void createProduct_isSuccessful(ChromeDriver driver) {
         // Exercise: Navigate to Create Product page
         driver.get(baseUrl + "/product/create");
         
@@ -66,7 +66,7 @@ class CreateProductFunctionalTest {
     }
 
     @Test
-    void createProduct_emptyName_staysOnPage(ChromeDriver driver) throws Exception {
+    void createProduct_emptyName_staysOnPage(ChromeDriver driver) {
         // Exercise: Navigate to Create Product page
         driver.get(baseUrl + "/product/create");
 
@@ -90,7 +90,7 @@ class CreateProductFunctionalTest {
     }
 
     @Test
-    void createProduct_negativeQuantity_staysOnPage(ChromeDriver driver) throws Exception {
+    void createProduct_negativeQuantity_staysOnPage(ChromeDriver driver) {
         // Exercise: Navigate to Create Product page
         driver.get(baseUrl + "/product/create");
 
@@ -116,7 +116,7 @@ class CreateProductFunctionalTest {
     }
 
 @Test
-void createProduct_emptyQuantity_staysOnPage(ChromeDriver driver) throws Exception {
+void createProduct_emptyQuantity_staysOnPage(ChromeDriver driver) {
     // Exercise: Navigate to Create Product page
     driver.get(baseUrl + "/product/create");
 
