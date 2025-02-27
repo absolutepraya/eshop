@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 import id.ac.ui.cs.advprog.eshop.model.Item;
 import id.ac.ui.cs.advprog.eshop.service.ItemService;

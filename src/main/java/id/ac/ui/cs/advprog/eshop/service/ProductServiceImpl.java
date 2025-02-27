@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.ItemRepository;
-import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl extends AbstractItemService<Product, ItemRepository<Product>> implements ProductService {
