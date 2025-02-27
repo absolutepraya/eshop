@@ -67,40 +67,14 @@ class ProductControllerTest {
     }
 
     @Test
-    void editProductPage_withMultipleProducts_shouldReturnEditPage() throws Exception {
-        // Create multiple products to test loop iteration
-        Product product1 = new Product();
-        product1.setProductId("first-id");
-        product1.setProductName("First Product");
-        
-        Product product2 = new Product();
-        product2.setProductId("test-id");
-        product2.setProductName("Test Product");
-        
-        List<Product> products = Arrays.asList(product1, product2);
-        when(service.findAll()).thenReturn(products);
-
-        // Test finding the second product
-        mockMvc.perform(get("/product/edit")
-               .param("id", "test-id"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("editProduct"))
-               .andExpect(model().attributeExists("product"))
-               .andExpect(model().attribute("product", product2));
-    }
-
-    @Test
-    void editProductPage_whenProductIsFirst_shouldReturnEditPage() throws Exception {
-        // Test finding the first product in the list
+    void editProductPage_shouldReturnEditPage() throws Exception {
         Product product = new Product();
         product.setProductId("test-id");
         product.setProductName("Test Product");
         
-        List<Product> products = Arrays.asList(product);
-        when(service.findAll()).thenReturn(products);
+        when(service.findById("test-id")).thenReturn(product);
 
-        mockMvc.perform(get("/product/edit")
-               .param("id", "test-id"))
+        mockMvc.perform(get("/product/edit/{id}", "test-id"))
                .andExpect(status().isOk())
                .andExpect(view().name("editProduct"))
                .andExpect(model().attributeExists("product"))
@@ -109,34 +83,19 @@ class ProductControllerTest {
 
     @Test
     void editProductPage_withNonExistentId_shouldRedirectToList() throws Exception {
-        // Create a list with some products but not the one we're looking for
-        Product product1 = new Product();
-        product1.setProductId("other-id");
-        Product product2 = new Product();
-        product2.setProductId("another-id");
-        
-        List<Product> products = Arrays.asList(product1, product2);
-        when(service.findAll()).thenReturn(products);
+        when(service.findById("non-existent-id")).thenReturn(null);
 
-        mockMvc.perform(get("/product/edit")
-               .param("id", "non-existent-id"))
+        mockMvc.perform(get("/product/edit/{id}", "non-existent-id"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(view().name("redirect:list"));
-    }
-
-    @Test
-    void editProductPage_whenProductListEmpty_shouldRedirectToList() throws Exception {
-        // Test with empty product list
-        when(service.findAll()).thenReturn(Arrays.asList());
-
-        mockMvc.perform(get("/product/edit")
-               .param("id", "any-id"))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(view().name("redirect:list"));
+               .andExpect(view().name("redirect:../list"));
     }
 
     @Test
     void editProductPost_whenValidProduct_shouldRedirectToList() throws Exception {
+        Product product = new Product();
+        product.setProductId("test-id");
+        when(service.update(any(Product.class))).thenReturn(product);
+        
         mockMvc.perform(post("/product/edit")
                .param("productId", "test-id")
                .param("productName", "Updated Product")
@@ -144,7 +103,7 @@ class ProductControllerTest {
                .andExpect(status().is3xxRedirection())
                .andExpect(view().name("redirect:list"));
         
-        verify(service, times(1)).edit(any(Product.class));
+        verify(service, times(1)).update(any(Product.class));
     }
 
     @Test
@@ -156,14 +115,14 @@ class ProductControllerTest {
                .andExpect(status().isOk())
                .andExpect(view().name("editProduct"));
         
-        verify(service, never()).edit(any(Product.class));
+        verify(service, never()).update(any(Product.class));
     }
 
     @Test
     void deleteProduct_shouldRedirectToList() throws Exception {
         String productId = "test-id";
         
-        mockMvc.perform(get("/product/delete")
+        mockMvc.perform(post("/product/delete")
                .param("id", productId))
                .andExpect(status().is3xxRedirection())
                .andExpect(view().name("redirect:list"));

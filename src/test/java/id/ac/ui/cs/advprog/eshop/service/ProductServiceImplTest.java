@@ -1,15 +1,15 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
+import id.ac.ui.cs.advprog.eshop.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,15 +20,16 @@ import static org.mockito.Mockito.*;
 class ProductServiceImplTest {
 
     @Mock
-    private ProductRepository productRepositoryBean;
+    private ItemRepository<Product> productRepository;
 
-    @InjectMocks
     private ProductServiceImpl productService;
 
     private Product product;
 
     @BeforeEach
     void setUp() {
+        productService = new ProductServiceImpl(productRepository);
+        
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Sampo Cap Bambang");
@@ -37,11 +38,11 @@ class ProductServiceImplTest {
 
     @Test
     void create_shouldCreateProduct() {
-        when(productRepositoryBean.create(any(Product.class))).thenReturn(product);
+        when(productRepository.create(any(Product.class))).thenReturn(product);
 
         Product created = productService.create(product);
 
-        verify(productRepositoryBean, times(1)).create(product);
+        verify(productRepository, times(1)).create(product);
         assertEquals(product.getProductId(), created.getProductId());
         assertEquals(product.getProductName(), created.getProductName());
         assertEquals(product.getProductQuantity(), created.getProductQuantity());
@@ -58,11 +59,11 @@ class ProductServiceImplTest {
         product2.setProductQuantity(50);
         productList.add(product2);
 
-        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
+        when(productRepository.findAll()).thenReturn(productList.iterator());
 
         List<Product> found = productService.findAll();
 
-        verify(productRepositoryBean, times(1)).findAll();
+        verify(productRepository, times(1)).findAll();
         assertEquals(2, found.size());
         assertEquals(product.getProductId(), found.get(0).getProductId());
         assertEquals(product2.getProductId(), found.get(1).getProductId());
@@ -70,83 +71,66 @@ class ProductServiceImplTest {
 
     @Test
     void findAll_whenEmpty_shouldReturnEmptyList() {
-        when(productRepositoryBean.findAll()).thenReturn(new ArrayList<Product>().iterator());
+        when(productRepository.findAll()).thenReturn(new ArrayList<Product>().iterator());
 
         List<Product> found = productService.findAll();
 
-        verify(productRepositoryBean, times(1)).findAll();
+        verify(productRepository, times(1)).findAll();
         assertTrue(found.isEmpty());
     }
-
-@Test
-    void edit_whenProductExists_shouldUpdateProduct() {
-        // Create initial product in the list
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
-        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
+    
+    @Test
+    void findById_shouldReturnCorrectProduct() {
+        when(productRepository.findById(product.getId())).thenReturn(product);
         
+        Product found = productService.findById(product.getId());
+        
+        verify(productRepository, times(1)).findById(product.getId());
+        assertEquals(product.getProductId(), found.getProductId());
+        assertEquals(product.getProductName(), found.getProductName());
+    }
+    
+    @Test
+    void findById_whenNonExistent_shouldReturnNull() {
+        when(productRepository.findById("non-existent")).thenReturn(null);
+        
+        Product found = productService.findById("non-existent");
+        
+        verify(productRepository, times(1)).findById("non-existent");
+        assertNull(found);
+    }
+
+    @Test
+    void update_shouldUpdateProduct() {
         // Create updated product
         Product updatedProduct = new Product();
         updatedProduct.setProductId(product.getProductId());
         updatedProduct.setProductName("Updated Name");
         updatedProduct.setProductQuantity(200);
         
-        when(productRepositoryBean.edit(updatedProduct)).thenReturn(updatedProduct);
+        when(productRepository.update(updatedProduct)).thenReturn(updatedProduct);
 
-        Product result = productService.edit(updatedProduct);
+        Product result = productService.update(updatedProduct);
 
-        verify(productRepositoryBean).findAll();
-        verify(productRepositoryBean).edit(updatedProduct);
+        verify(productRepository).update(updatedProduct);
         assertNotNull(result);
         assertEquals(updatedProduct.getProductName(), result.getProductName());
         assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
     }
 
     @Test
-    void edit_whenProductDoesNotExist_shouldReturnNull() {
-        // Empty product list
-        when(productRepositoryBean.findAll()).thenReturn(new ArrayList<Product>().iterator());
-        
+    void update_whenNonExistent_shouldReturnNull() {
         Product nonExistentProduct = new Product();
         nonExistentProduct.setProductId("non-existent-id");
         nonExistentProduct.setProductName("Non Existent");
         nonExistentProduct.setProductQuantity(1);
+        
+        when(productRepository.update(nonExistentProduct)).thenReturn(null);
 
-        Product result = productService.edit(nonExistentProduct);
+        Product result = productService.update(nonExistentProduct);
 
-        verify(productRepositoryBean).findAll();
-        verify(productRepositoryBean, never()).edit(any(Product.class));
+        verify(productRepository).update(nonExistentProduct);
         assertNull(result);
-    }
-
-    @Test
-    void edit_whenMultipleProducts_shouldUpdateCorrectOne() {
-        // Create list with multiple products
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
-        
-        Product product2 = new Product();
-        product2.setProductId("second-id");
-        product2.setProductName("Second Product");
-        product2.setProductQuantity(50);
-        productList.add(product2);
-        
-        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
-        
-        // Update second product
-        Product updatedProduct = new Product();
-        updatedProduct.setProductId("second-id");
-        updatedProduct.setProductName("Updated Second Product");
-        updatedProduct.setProductQuantity(75);
-        
-        when(productRepositoryBean.edit(any(Product.class))).thenReturn(updatedProduct);
-
-        Product result = productService.edit(updatedProduct);
-
-        verify(productRepositoryBean, times(1)).edit(updatedProduct);
-        assertNotNull(result);
-        assertEquals(updatedProduct.getProductName(), result.getProductName());
-        assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
     }
 
     @Test
@@ -155,6 +139,6 @@ class ProductServiceImplTest {
         
         productService.delete(productId);
 
-        verify(productRepositoryBean, times(1)).delete(productId);
+        verify(productRepository, times(1)).delete(productId);
     }
 }
