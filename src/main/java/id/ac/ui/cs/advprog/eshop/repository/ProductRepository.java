@@ -30,11 +30,4 @@ public class ProductRepository extends AbstractItemRepository<Product> {
         }
         return null;
     }
-    
-    /**
-     * Legacy method for backward compatibility
-     */
-    public Product edit(Product product) {
-        return update(product);
-    }
 }

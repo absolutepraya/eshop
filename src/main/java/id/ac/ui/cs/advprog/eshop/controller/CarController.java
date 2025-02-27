@@ -11,9 +11,6 @@ import id.ac.ui.cs.advprog.eshop.service.CarService;
 @Controller
 @RequestMapping("/car")
 public class CarController extends AbstractItemController<Car> {
-    
-    private final CarService carService;
-    
     @Autowired
     public CarController(CarService carService) {
         super(
@@ -25,7 +22,6 @@ public class CarController extends AbstractItemController<Car> {
             "car",
             "cars"
         );
-        this.carService = carService;
     }
 
     @GetMapping("/create")
@@ -56,38 +52,5 @@ public class CarController extends AbstractItemController<Car> {
     @PostMapping("/delete")
     public String deleteCar(@RequestParam("id") String carId) {
         return delete(carId);
-    }
-    
-    // Legacy endpoints for backward compatibility
-    
-    @GetMapping("/createCar")
-    public String legacyCreateCarPage(Model model) {
-        return createCarPage(model);
-    }
-    
-    @PostMapping("/createCar")
-    public String legacyCreateCarPost(@ModelAttribute Car car, Model model) {
-        return createCarPost(car, model);
-    }
-    
-    @GetMapping("/listCar")
-    public String legacyCarListPage(Model model) {
-        return carListPage(model);
-    }
-    
-    @GetMapping("/editCar/{carId}")
-    public String legacyEditCarPage(@PathVariable String carId, Model model) {
-        return editCarPage(carId, model);
-    }
-    
-    @PostMapping("/editCar")
-    public String legacyEditCarPost(@ModelAttribute Car car, Model model) {
-        return editCarPost(car, model);
-    }
-    
-    @PostMapping("/deleteCar")
-    public String legacyDeleteCar(@RequestParam("carId") String carId) {
-        carService.deleteCarById(carId);
-        return "redirect:listCar";
     }
 }
