@@ -18,7 +18,7 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
     @InjectMocks
-    ProductRepository productRepository;
+    ProductRepository productRepositoryBean;
 
     @BeforeEach
     void setUp() {
@@ -32,9 +32,9 @@ class ProductRepositoryTest {
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Sampo Cap Bambang");
         product.setProductQuantity(100);
-        productRepository.create(product);
+        productRepositoryBean.create(product);
 
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertTrue(productIterator.hasNext());
         Product savedProduct = productIterator.next();
         assertEquals(product.getProductId(), savedProduct.getProductId());
@@ -44,7 +44,7 @@ class ProductRepositoryTest {
 
     @Test
     void testFindAllIfEmpty() {
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertFalse(productIterator.hasNext());
     }
 
@@ -54,15 +54,15 @@ class ProductRepositoryTest {
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product1.setProductName("Sampo Cap Bambang");
         product1.setProductQuantity(100);
-        productRepository.create(product1);
+        productRepositoryBean.create(product1);
 
         Product product2 = new Product();
         product2.setProductId("a0f9de46-90b1-437d-a0bf-d0821d6e9096");
         product2.setProductName("Sampo Cap Usep");
         product2.setProductQuantity(50);
-        productRepository.create(product2);
+        productRepositoryBean.create(product2);
 
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertTrue(productIterator.hasNext());
         Product savedProduct = productIterator.next();
         assertEquals(product1.getProductId(), savedProduct.getProductId());
@@ -78,7 +78,7 @@ class ProductRepositoryTest {
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Sampo Cap Bambang");
         product.setProductQuantity(100);
-        productRepository.create(product);
+        productRepositoryBean.create(product);
 
         // Create updated product with same ID
         Product updatedProduct = new Product();
@@ -87,7 +87,7 @@ class ProductRepositoryTest {
         updatedProduct.setProductQuantity(200);
         
         // Perform update
-        Product result = productRepository.edit(updatedProduct);
+        Product result = productRepositoryBean.edit(updatedProduct);
         
         // Verify the update
         assertNotNull(result);
@@ -95,7 +95,7 @@ class ProductRepositoryTest {
         assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
         
         // Verify through findAll
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertTrue(productIterator.hasNext());
         Product savedProduct = productIterator.next();
         assertEquals(updatedProduct.getProductName(), savedProduct.getProductName());
@@ -109,14 +109,14 @@ class ProductRepositoryTest {
         product1.setProductId("26fc7ab5-8e80-44d7-9fdc-2a804e1ede9f");
         product1.setProductName("First Product");
         product1.setProductQuantity(100);
-        productRepository.create(product1);
+        productRepositoryBean.create(product1);
 
         // Create second product
         Product product2 = new Product();
         product2.setProductId("b6104af2-8a6e-40b8-aec5-396cdae48471");
         product2.setProductName("Second Product");
         product2.setProductQuantity(200);
-        productRepository.create(product2);
+        productRepositoryBean.create(product2);
 
         // Update second product
         Product updatedProduct = new Product();
@@ -124,7 +124,7 @@ class ProductRepositoryTest {
         updatedProduct.setProductName("Updated Second Product");
         updatedProduct.setProductQuantity(300);
         
-        Product result = productRepository.edit(updatedProduct);
+        Product result = productRepositoryBean.edit(updatedProduct);
         
         // Verify the update
         assertNotNull(result);
@@ -132,7 +132,7 @@ class ProductRepositoryTest {
         assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
         
         // Verify first product remained unchanged
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         Product firstProduct = productIterator.next();
         assertEquals("First Product", firstProduct.getProductName());
         assertEquals(100, firstProduct.getProductQuantity());
@@ -145,7 +145,7 @@ class ProductRepositoryTest {
         nonExistentProduct.setProductName("Non Existent Product");
         nonExistentProduct.setProductQuantity(100);
         
-        Product result = productRepository.edit(nonExistentProduct);
+        Product result = productRepositoryBean.edit(nonExistentProduct);
         assertNull(result);
     }
 
@@ -156,27 +156,27 @@ class ProductRepositoryTest {
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Sampo Cap Bambang");
         product.setProductQuantity(100);
-        productRepository.create(product);
+        productRepositoryBean.create(product);
 
         // Verify product exists
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertTrue(productIterator.hasNext());
 
         // Delete the product
-        productRepository.delete(product.getProductId());
+        productRepositoryBean.delete(product.getProductId());
 
         // Verify product no longer exists
-        productIterator = productRepository.findAll();
+        productIterator = productRepositoryBean.findAll();
         assertFalse(productIterator.hasNext());
     }
 
     @Test
     void testDeleteNonExistentProduct() {
         // Delete non-existent product
-        productRepository.delete("non-existent-id");
+        productRepositoryBean.delete("non-existent-id");
         
         // Verify no products exist
-        Iterator<Product> productIterator = productRepository.findAll();
+        Iterator<Product> productIterator = productRepositoryBean.findAll();
         assertFalse(productIterator.hasNext());
     }
 }

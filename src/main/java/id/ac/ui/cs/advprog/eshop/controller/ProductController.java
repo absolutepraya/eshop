@@ -1,39 +1,26 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import id.ac.ui.cs.advprog.eshop.model.Car;
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.service.CarServiceImpl;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
-import jakarta.validation.Valid;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
 
-    private static final String REDIRECT_LIST = "redirect:list";
-
-    // Inject the product service
+    private final ProductService productService;
+    
     @Autowired
-    private ProductService service;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-    /**
-     * Handles GET request to show the create product form
-     * @param model Model object to pass data to view
-     * @return View name for create product page
-     */
     @GetMapping("/create")
     public String createProductPage(Model model) {
         Product product = new Product();
@@ -41,128 +28,35 @@ public class ProductController {
         return "createProduct";
     }
 
-    /**
-     * Handles POST request to create a new product
-     * @param product Product object from form submission
-     * @param model Model object to pass data to view
-     * @return Redirects to product list page
-     */
     @PostMapping("/create")
-    public String createProductPost(@Valid @ModelAttribute Product product, 
-                                  BindingResult bindingResult, 
-                                  Model model) {
-        if (bindingResult.hasErrors()) {
-            return "createProduct";
-        }
-        service.create(product);
-        return REDIRECT_LIST;
+    public String createProductPost(@ModelAttribute Product product, Model model) {
+        productService.create(product);
+        return "redirect:list";
     }
 
-    /**
-     * Handles GET request to show list of all products
-     * @param model Model object to pass data to view
-     * @return View name for product list page
-     */
     @GetMapping("/list")
     public String productListPage(Model model) {
-        List<Product> allProducts = service.findAll();
+        List<Product> allProducts = productService.findAll();
         model.addAttribute("products", allProducts);
         return "productList";
     }
 
-    /**
-     * Handles GET request to show the edit product form
-     * @param id Product ID to edit
-     * @param model Model object to pass data to view
-     * @return View name for edit product page or redirects to list if product not found
-     */
     @GetMapping("/edit")
     public String editProductPage(@RequestParam String id, Model model) {
-        List<Product> products = service.findAll();
-        for (Product product : products) {
-            if (product.getProductId().equals(id)) {
-                model.addAttribute("product", product);
-                return "editProduct";
-            }
-        }
-        return REDIRECT_LIST;
+        Product product = productService.findById(id);
+        model.addAttribute("product", product);
+        return "editProduct";
     }
 
-    /**
-     * Handles POST request to update an existing product
-     * @param product Updated product object from form submission
-     * @param model Model object to pass data to view
-     * @return Redirects to product list page
-     */
     @PostMapping("/edit")
-    public String editProductPost(@Valid @ModelAttribute Product product, 
-                                BindingResult bindingResult, 
-                                Model model) {
-        if (bindingResult.hasErrors()) {
-            return "editProduct";
-        }
-        service.edit(product);
-        return REDIRECT_LIST;
+    public String editProductPost(@ModelAttribute Product product, Model model) {
+        productService.update(product);
+        return "redirect:list";
     }
 
-    /**
-     * Handles GET request to delete a product
-     * @param id Product ID to delete
-     * @return Redirects to product list page
-     */
     @GetMapping("/delete")
-    public String deleteProduct(@RequestParam String id) {
-        service.delete(id);
-        return REDIRECT_LIST;
-    }
-}
-
-
-@Controller
-@RequestMapping("/car")
-class CarController extends ProductController {
-    private static final String REDIRECT_LIST = "redirect:listCar";
-
-    @Autowired
-    private CarServiceImpl carservice;
-
-    @GetMapping("/createCar")
-    public String createCarPage(Model model) {
-        Car car = new Car();
-        model.addAttribute("car", car);
-        return "createCar";
-    }
-
-    @PostMapping("/createCar")
-    public String createCarPost(@ModelAttribute Car car, Model model) {
-        carservice.create(car);
-        return REDIRECT_LIST;
-    }
-
-    @GetMapping("/listCar")
-    public String carListPage(Model model) {
-        List<Car> allCars = carservice.findAll();
-        model.addAttribute("cars", allCars);
-        return "carList";
-    }
-
-    @GetMapping("/editCar/{carId}")
-    public String editCarPage(@PathVariable String carId, Model model) {
-        Car car = carservice.findById(carId);
-        model.addAttribute("car", car);
-        return "editCar";
-    }
-
-    @PostMapping("/editCar") 
-    public String editCarPost(@ModelAttribute Car car, Model model) {
-        System.out.println(car.getCarId());
-        carservice.update(car.getCarId(), car);
-        return REDIRECT_LIST;
-    }
-
-    @PostMapping("/deleteCar")
-    public String deleteCar(@RequestParam("carId") String carId) {
-        carservice.deleteCarById(carId);
-        return REDIRECT_LIST;
+    public String deleteProduct(@RequestParam("id") String productId) {
+        productService.delete(productId);
+        return "redirect:/product/list";
     }
 }

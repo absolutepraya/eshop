@@ -3,9 +3,15 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import org.springframework.stereotype.Repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
 @Repository
 public class ProductRepository extends AbstractItemRepository<Product> {
+    
+    public ProductRepository(IdGeneratorService idGeneratorService) {
+        super(idGeneratorService);
+    }
+    
     /**
      * Updates an existing product in the repository
      * @param product The product with updated information

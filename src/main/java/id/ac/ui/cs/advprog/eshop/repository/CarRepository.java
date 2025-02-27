@@ -3,9 +3,15 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import org.springframework.stereotype.Repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Car;
+import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
 @Repository
 public class CarRepository extends AbstractItemRepository<Car> {
+    
+    public CarRepository(IdGeneratorService idGeneratorService) {
+        super(idGeneratorService);
+    }
+    
     @Override
     public Car update(Car car) {
         for (Car existingCar : itemData) {

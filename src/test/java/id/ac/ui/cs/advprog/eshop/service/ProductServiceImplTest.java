@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 class ProductServiceImplTest {
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository productRepositoryBean;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -37,11 +37,11 @@ class ProductServiceImplTest {
 
     @Test
     void create_shouldCreateProduct() {
-        when(productRepository.create(any(Product.class))).thenReturn(product);
+        when(productRepositoryBean.create(any(Product.class))).thenReturn(product);
 
         Product created = productService.create(product);
 
-        verify(productRepository, times(1)).create(product);
+        verify(productRepositoryBean, times(1)).create(product);
         assertEquals(product.getProductId(), created.getProductId());
         assertEquals(product.getProductName(), created.getProductName());
         assertEquals(product.getProductQuantity(), created.getProductQuantity());
@@ -58,11 +58,11 @@ class ProductServiceImplTest {
         product2.setProductQuantity(50);
         productList.add(product2);
 
-        when(productRepository.findAll()).thenReturn(productList.iterator());
+        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
 
         List<Product> found = productService.findAll();
 
-        verify(productRepository, times(1)).findAll();
+        verify(productRepositoryBean, times(1)).findAll();
         assertEquals(2, found.size());
         assertEquals(product.getProductId(), found.get(0).getProductId());
         assertEquals(product2.getProductId(), found.get(1).getProductId());
@@ -70,11 +70,11 @@ class ProductServiceImplTest {
 
     @Test
     void findAll_whenEmpty_shouldReturnEmptyList() {
-        when(productRepository.findAll()).thenReturn(new ArrayList<Product>().iterator());
+        when(productRepositoryBean.findAll()).thenReturn(new ArrayList<Product>().iterator());
 
         List<Product> found = productService.findAll();
 
-        verify(productRepository, times(1)).findAll();
+        verify(productRepositoryBean, times(1)).findAll();
         assertTrue(found.isEmpty());
     }
 
@@ -83,7 +83,7 @@ class ProductServiceImplTest {
         // Create initial product in the list
         List<Product> productList = new ArrayList<>();
         productList.add(product);
-        when(productRepository.findAll()).thenReturn(productList.iterator());
+        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
         
         // Create updated product
         Product updatedProduct = new Product();
@@ -91,12 +91,12 @@ class ProductServiceImplTest {
         updatedProduct.setProductName("Updated Name");
         updatedProduct.setProductQuantity(200);
         
-        when(productRepository.edit(updatedProduct)).thenReturn(updatedProduct);
+        when(productRepositoryBean.edit(updatedProduct)).thenReturn(updatedProduct);
 
         Product result = productService.edit(updatedProduct);
 
-        verify(productRepository).findAll();
-        verify(productRepository).edit(updatedProduct);
+        verify(productRepositoryBean).findAll();
+        verify(productRepositoryBean).edit(updatedProduct);
         assertNotNull(result);
         assertEquals(updatedProduct.getProductName(), result.getProductName());
         assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
@@ -105,7 +105,7 @@ class ProductServiceImplTest {
     @Test
     void edit_whenProductDoesNotExist_shouldReturnNull() {
         // Empty product list
-        when(productRepository.findAll()).thenReturn(new ArrayList<Product>().iterator());
+        when(productRepositoryBean.findAll()).thenReturn(new ArrayList<Product>().iterator());
         
         Product nonExistentProduct = new Product();
         nonExistentProduct.setProductId("non-existent-id");
@@ -114,8 +114,8 @@ class ProductServiceImplTest {
 
         Product result = productService.edit(nonExistentProduct);
 
-        verify(productRepository).findAll();
-        verify(productRepository, never()).edit(any(Product.class));
+        verify(productRepositoryBean).findAll();
+        verify(productRepositoryBean, never()).edit(any(Product.class));
         assertNull(result);
     }
 
@@ -131,7 +131,7 @@ class ProductServiceImplTest {
         product2.setProductQuantity(50);
         productList.add(product2);
         
-        when(productRepository.findAll()).thenReturn(productList.iterator());
+        when(productRepositoryBean.findAll()).thenReturn(productList.iterator());
         
         // Update second product
         Product updatedProduct = new Product();
@@ -139,11 +139,11 @@ class ProductServiceImplTest {
         updatedProduct.setProductName("Updated Second Product");
         updatedProduct.setProductQuantity(75);
         
-        when(productRepository.edit(any(Product.class))).thenReturn(updatedProduct);
+        when(productRepositoryBean.edit(any(Product.class))).thenReturn(updatedProduct);
 
         Product result = productService.edit(updatedProduct);
 
-        verify(productRepository, times(1)).edit(updatedProduct);
+        verify(productRepositoryBean, times(1)).edit(updatedProduct);
         assertNotNull(result);
         assertEquals(updatedProduct.getProductName(), result.getProductName());
         assertEquals(updatedProduct.getProductQuantity(), result.getProductQuantity());
@@ -155,6 +155,6 @@ class ProductServiceImplTest {
         
         productService.delete(productId);
 
-        verify(productRepository, times(1)).delete(productId);
+        verify(productRepositoryBean, times(1)).delete(productId);
     }
 }
