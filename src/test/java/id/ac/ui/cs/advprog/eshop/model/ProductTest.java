@@ -1,8 +1,8 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
     Product product;
@@ -58,5 +58,25 @@ class ProductTest {
         this.product.setQuantity(200);
         assertEquals(200, this.product.getQuantity());
         assertEquals(200, this.product.getProductQuantity());
+    }
+
+    @Test
+    void getQuantity_whenProductQuantityIsNull_shouldReturnZero() {
+        // Create product with null quantity
+        Product product = new Product();
+        // Don't set productQuantity, so it stays null
+        
+        // Test the getQuantity method
+        assertEquals(0, product.getQuantity());
+    }
+    
+    @Test
+    void getQuantity_whenProductQuantityIsNotNull_shouldReturnQuantity() {
+        // Create product with non-null quantity
+        Product product = new Product();
+        product.setProductQuantity(10);
+        
+        // Test the getQuantity method
+        assertEquals(10, product.getQuantity());
     }
 }

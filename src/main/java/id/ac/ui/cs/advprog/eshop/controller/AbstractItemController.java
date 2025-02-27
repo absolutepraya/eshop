@@ -52,7 +52,8 @@ public abstract class AbstractItemController<T extends Item> {
     }
     
     protected String editPage(String id, Model model) {
-        model.addAttribute(itemAttribute, itemService.findById(id));
+        T item = itemService.findById(id);
+        model.addAttribute(itemAttribute, item);
         return editView;
     }
     
