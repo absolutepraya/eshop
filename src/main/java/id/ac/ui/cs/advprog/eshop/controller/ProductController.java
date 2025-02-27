@@ -8,56 +8,50 @@ import org.springframework.web.bind.annotation.*;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/product")
-public class ProductController {
-    private static final String REDIRECT_LIST = "redirect:list";
-
-    private final ProductService productService;
+public class ProductController extends AbstractItemController<Product> {
     
     @Autowired
     public ProductController(ProductService productService) {
-        this.productService = productService;
+        super(
+            productService,
+            "redirect:list",
+            "createProduct",
+            "productList",
+            "editProduct",
+            "product",
+            "products"
+        );
     }
 
     @GetMapping("/create")
     public String createProductPage(Model model) {
-        Product product = new Product();
-        model.addAttribute("product", product);
-        return "createProduct";
+        return createPage(model, new Product());
     }
 
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
-        productService.create(product);
-        return REDIRECT_LIST;
+        return createPost(product);
     }
 
     @GetMapping("/list")
     public String productListPage(Model model) {
-        List<Product> allProducts = productService.findAll();
-        model.addAttribute("products", allProducts);
-        return "productList";
+        return listPage(model);
     }
 
-    @GetMapping("/edit")
-    public String editProductPage(@RequestParam String id, Model model) {
-        Product product = productService.findById(id);
-        model.addAttribute("product", product);
-        return "editProduct";
+    @GetMapping("/edit/{id}")
+    public String editProductPage(@PathVariable String id, Model model) {
+        return editPage(id, model);
     }
 
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product, Model model) {
-        productService.update(product);
-        return REDIRECT_LIST;
+        return editPost(product);
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteProduct(@RequestParam("id") String productId) {
-        productService.delete(productId);
-        return REDIRECT_LIST;
+        return delete(productId);
     }
 }

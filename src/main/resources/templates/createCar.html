@@ -17,8 +17,9 @@
 		<div class="container">
 			<h3>Create New Car</h3>
 
+			<!-- Update form action to use the new endpoint -->
 			<form
-				th:action="@{/car/createCar}"
+				th:action="@{/car/create}"
 				th:object="${car}"
 				method="post"
 			>
@@ -29,7 +30,7 @@
 						type="text"
 						class="form-control mb-4 col-4"
 						id="nameInput"
-						placeholder="Enter car' name"
+						placeholder="Enter car's name"
 					/>
 				</div>
 				<div class="form-group">
@@ -39,7 +40,7 @@
 						type="text"
 						class="form-control mb-4 col-4"
 						id="colorInput"
-						placeholder="Enter car' color"
+						placeholder="Enter car's color"
 					/>
 				</div>
 				<div class="form-group">
@@ -49,7 +50,7 @@
 						type="text"
 						class="form-control mb-4 col-4"
 						id="quantityInput"
-						placeholder="Enter car' quantity"
+						placeholder="Enter car's quantity"
 					/>
 				</div>
 

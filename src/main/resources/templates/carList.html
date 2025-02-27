@@ -16,8 +16,9 @@
 	<body>
 		<div class="container my-2">
 			<h2>Car List</h2>
+			<!-- Update href to use the new endpoint -->
 			<a
-				th:href="@{/car/createCar}"
+				th:href="@{/car/create}"
 				class="btn btn-primary btn-sm mb-3"
 				>Create Car</a
 			>
@@ -29,8 +30,9 @@
 				<thead>
 					<tr>
 						<th scope="col">Car Name</th>
-						<th scope="col">Quantity</th>
 						<th scope="col">Color</th>
+						<th scope="col">Quantity</th>
+						<th scope="col" colspan="2">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,20 +41,23 @@
 						<td th:text="${car.carColor}"></td>
 						<td th:text="${car.carQuantity}"></td>
 						<td>
+							<!-- Update href to use the new endpoint -->
 							<a
-								th:href="@{/car/editCar/{id}(id=${car.carId})}"
+								th:href="@{/car/edit/{id}(id=${car.carId})}"
 								class="btn btn-info btn-sm"
 								>Edit</a
 							>
 						</td>
 						<td>
+							<!-- Update form action to use the new endpoint -->
 							<form
-								th:action="@{/car/deleteCar}"
+								th:action="@{/car/delete}"
 								method="post"
 							>
+								<!-- Update parameter name from carId to id -->
 								<input
 									type="hidden"
-									th:name="carId"
+									name="id"
 									th:value="${car.carId}"
 								/>
 								<button

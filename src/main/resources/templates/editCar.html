@@ -16,8 +16,9 @@
 		<div class="container mx-auto mt-8">
 			<h1 class="text-3xl font-bold mb-4">Edit Car</h1>
 
+			<!-- Update form action to use the new endpoint -->
 			<form
-				th:action="@{/car/editCar}"
+				th:action="@{/car/edit}"
 				method="post"
 				th:object="${car}"
 				class="max-w-md bg-white p-6 rounded-md shadow-md"
@@ -52,7 +53,7 @@
 						th:field="*{carColor}"
 						type="text"
 						id="carColor"
-						name="carQuantity"
+						name="carColor"
 						th:value="${car.carColor}"
 						class="mt-1 p-2 w-full border rounded-md"
 					/>

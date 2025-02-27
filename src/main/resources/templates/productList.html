@@ -38,17 +38,31 @@
 						<td th:text="${product.productName}"></td>
 						<td th:text="${product.productQuantity}"></td>
 						<td>
+							<!-- Update href to use path variable instead of query parameter -->
 							<a
-								th:href="@{/product/edit(id=${product.productId})}"
+								th:href="@{/product/edit/{id}(id=${product.productId})}"
 								class="btn btn-primary btn-sm"
 								>Edit</a
 							>
-							<a
-								th:href="@{/product/delete(id=${product.productId})}"
-								class="btn btn-danger btn-sm"
-								onclick="return confirm('Are you sure you want to delete this product?')"
-								>Delete</a
+							<!-- Change from GET to POST for delete operation -->
+							<form
+								th:action="@{/product/delete}"
+								method="post"
+								style="display: inline;"
 							>
+								<input
+									type="hidden"
+									name="id"
+									th:value="${product.productId}"
+								/>
+								<button
+									type="submit"
+									class="btn btn-danger btn-sm"
+									onclick="return confirm('Are you sure you want to delete this product?')"
+								>
+									Delete
+								</button>
+							</form>
 						</td>
 					</tr>
 				</tbody>
