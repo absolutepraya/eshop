@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
 @Repository
 public class ProductRepository {
     // In-memory storage for products
     private final List<Product> productData = new ArrayList<>();
+    
+    @Autowired
+    private IdGeneratorService idGeneratorService;
 
     /**
      * Creates a new product in the repository
@@ -19,6 +24,9 @@ public class ProductRepository {
      * @return The created product
      */
     public Product create(Product product) {
+        if (product.getProductId() == null) {
+            product.setProductId(idGeneratorService.generateId());
+        }
         productData.add(product);
         return product;
     }
