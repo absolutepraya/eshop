@@ -1,6 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
-import id.ac.ui.cs.advprog.eshop.model.Item;
+import id.ac.ui.cs.advprog.eshop.model.Identifiable;
 import id.ac.ui.cs.advprog.eshop.repository.ItemRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
  * @param <T> The type of item this service manages
  * @param <R> The type of repository this service uses
  */
-public abstract class AbstractItemService<T extends Item, R extends ItemRepository<T>> implements ItemService<T> {
+public abstract class AbstractItemService<T extends Identifiable, R extends ItemRepository<T>> implements ItemService<T> {
     
     @Autowired
     protected R repository;

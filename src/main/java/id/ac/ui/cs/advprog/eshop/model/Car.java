@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Getter @Setter @NoArgsConstructor
-public class Car extends AbstractItem {
+public class Car extends AbstractItem implements CarItem {
     // We keep these for backward compatibility and delegate to the parent class
     private String carId;
     private String carName; 
@@ -45,12 +45,12 @@ public class Car extends AbstractItem {
         super.setQuantity(quantity);
     }
     
-    // Car-specific method
+    @Override
     public String getColor() {
         return this.carColor;
     }
     
-    // Car-specific method
+    @Override
     public void setColor(String color) {
         this.carColor = color;
     }
