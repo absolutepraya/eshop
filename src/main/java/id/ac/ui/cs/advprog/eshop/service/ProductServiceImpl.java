@@ -38,6 +38,16 @@ public class ProductServiceImpl implements ProductService {
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
     }
+    
+    /**
+     * Finds a product by its ID
+     * @param id The ID of the product to find
+     * @return The found product or null if not found
+     */
+    @Override
+    public Product findById(String id) {
+        return productRepository.findById(id);
+    }
 
     /**
      * Updates an existing product
@@ -45,14 +55,16 @@ public class ProductServiceImpl implements ProductService {
      * @return The updated product if found, null otherwise
      */
     @Override
+    public Product update(Product product) {
+        return productRepository.update(product);
+    }
+    
+    /**
+     * Legacy method for backward compatibility
+     */
+    @Override
     public Product edit(Product product) {
-        List<Product> products = findAll();
-        for (Product existingProduct : products) {
-            if (existingProduct.getProductId().equals(product.getProductId())) {
-                return productRepository.edit(product);
-            }
-        }
-        return null;
+        return update(product);
     }
 
     /**

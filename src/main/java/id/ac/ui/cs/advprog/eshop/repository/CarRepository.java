@@ -11,12 +11,13 @@ import id.ac.ui.cs.advprog.eshop.model.Car;
 import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
 @Repository
-public class CarRepository {
+public class CarRepository implements ItemRepository<Car> {
     private final List<Car> carData = new ArrayList<>();
     
     @Autowired
     private IdGeneratorService idGeneratorService;
 
+    @Override
     public Car create(Car car){
         if(car.getCarId() == null){
             car.setCarId(idGeneratorService.generateId());
@@ -25,10 +26,12 @@ public class CarRepository {
         return car;
     }
 
+    @Override
     public Iterator<Car> findAll(){
         return carData.iterator();
     }
 
+    @Override
     public Car findById(String id) {
         for (Car car : carData) {
             if (car.getCarId().equals(id)) {
@@ -38,21 +41,31 @@ public class CarRepository {
         return null;
     }
 
-    public Car update(String id, Car updatedCar) {
+    @Override
+    public Car update(Car car) {
         for (int i = 0; i < carData.size(); i++) {
-            Car car = carData.get(i);
-            if (car.getCarId().equals(id)) {
+            Car existingCar = carData.get(i);
+            if (existingCar.getCarId().equals(car.getCarId())) {
                 // Update the existing car with the new information
-                car.setCarName(updatedCar.getCarName());
-                car.setCarColor(updatedCar.getCarColor());
-                car.setCarQuantity(updatedCar.getCarQuantity());
-                return car;
+                existingCar.setCarName(car.getCarName());
+                existingCar.setCarColor(car.getCarColor());
+                existingCar.setCarQuantity(car.getCarQuantity());
+                return existingCar;
             }
         }
         return null; // Handle the case where the car is not found
     }
 
+    @Override
     public void delete(String id) {
         carData.removeIf(car -> car.getCarId().equals(id));
+    }
+    
+    /**
+     * Legacy method for backward compatibility
+     */
+    public Car update(String id, Car updatedCar) {
+        updatedCar.setCarId(id);
+        return update(updatedCar);
     }
 }
