@@ -8,7 +8,8 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Setter @Getter @NoArgsConstructor
-public class Product implements Item {
+public class Product extends AbstractItem {
+    // We keep these for backward compatibility and delegate to the parent class
     private String productId;
     
     @NotBlank(message = "Product name is required")
@@ -26,6 +27,7 @@ public class Product implements Item {
     @Override
     public void setId(String id) {
         this.productId = id;
+        super.setId(id);
     }
 
     @Override
@@ -36,15 +38,17 @@ public class Product implements Item {
     @Override
     public void setName(String name) {
         this.productName = name;
+        super.setName(name);
     }
 
     @Override
     public int getQuantity() {
-        return this.productQuantity;
+        return this.productQuantity != null ? this.productQuantity : 0;
     }
 
     @Override
     public void setQuantity(int quantity) {
         this.productQuantity = quantity;
+        super.setQuantity(quantity);
     }
 }
