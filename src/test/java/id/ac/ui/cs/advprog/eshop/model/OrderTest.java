@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 
 public class OrderTest {
     private List<Product> products;
@@ -51,15 +52,15 @@ public class OrderTest {
         assertEquals("568a4f50-0b93-4d1b-8826-7bebc93f4a37", order.getId());
         assertEquals(1708560000L, order.getOrderTime());
         assertEquals("Safira Sudrajat", order.getAuthor());
-        assertEquals("WAITING_PAYMENT", order.getStatus());
+        assertEquals(OrderStatus.WAITING_PAYMENT.getValue(), order.getStatus());
     }
 
     @Test
     void testCreateOrderSuccessStatus() {
         Order order = new Order("568a4f50-0b93-4d1b-8826-7bebc93f4a37",
-                this.products, 1708560000L, "Safira Sudrajat", "SUCCESS");
+                this.products, 1708560000L, "Safira Sudrajat", OrderStatus.SUCCESS.getValue());
         
-        assertEquals("SUCCESS", order.getStatus());
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
     }
 
     @Test
@@ -75,8 +76,8 @@ public class OrderTest {
         Order order = new Order("568a4f50-0b93-4d1b-8826-7bebc93f4a37",
                 this.products, 1708560000L, "Safira Sudrajat");
         
-        order.setStatus("CANCELLED");
-        assertEquals("CANCELLED", order.getStatus());
+        order.setStatus(OrderStatus.CANCELLED.getValue());
+        assertEquals(OrderStatus.CANCELLED.getValue(), order.getStatus());
     }
 
     @Test
