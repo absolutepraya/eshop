@@ -2,10 +2,12 @@
 
 ## Deployed Application URL
 
-#### Product List Page  
+#### Product List Page
+
 [https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/product/list](https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/product/list)
 
 #### Car List Page
+
 [https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/car/list](https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/car/list)
 
 ## Contents
@@ -17,6 +19,8 @@
    - [Reflection](#reflection-week-2)
 3. **WEEK 3**
    - [Reflection](#reflection-week-3)
+4. **WEEK 4**
+   - [Reflection](#reflection-week-4)
 
 ## Reflection 1 Week 1
 
@@ -631,3 +635,74 @@ class Square extends Rectangle {
 ```
 
 By contrast, our project's adherence to SOLID principles has resulted in a codebase that is more maintainable, flexible, testable, and reusable.
+
+## Reflection Week 4
+
+### Test-Driven Development Reflection
+
+#### 1. Reflection on TDD Workflow Based on Percival's Self-Reflective Questions
+
+The Test-Driven Development workflow I implemented for the Order functionality has proven to be valuable in several ways:
+
+**Was the TDD process helpful for confident refactoring?**  
+Yes, having a comprehensive test suite for the Order system made refactoring much safer. When I needed to modify the status update logic, the tests immediately flagged any behavioral changes. This safety net encouraged me to make improvements without fear of breaking existing functionality.
+
+**Did you actually write tests first, or write them retrospectively?**  
+For most of the Order functionality, I did write tests first. This was particularly evident in the `OrderTest` class, where I defined the expected behavior before implementing the actual Order class. For example, I tested status validation before implementing it, which guided my implementation of the `contains()` method in `OrderStatus`.
+
+**Did your design benefit from TDD?**  
+Absolutely. Writing tests first influenced several design decisions:
+
+- The validation logic for order statuses emerged naturally from test cases
+- The clear separation between repository and service layers was driven by the need for testable units
+- The constructor design with validation logic was a direct result of testing invalid inputs first
+
+**Are you proud of your tests?**  
+The test suite achieves good coverage and tests essential functionality like order creation, status updates, and author-based filtering. However, there's room for improvement in testing edge cases and error conditions more thoroughly.
+
+**What would you improve next time?**  
+To make my TDD workflow more effective in the future, I would:
+
+1. Write even more granular tests before implementation
+2. Focus more on testing boundary conditions and error handling
+3. Consider writing acceptance tests first to guide the overall development flow
+4. Be more disciplined about not writing implementation code until tests are failing
+5. Add more test cases for error conditions, especially around validation logic
+
+#### 2. F.I.R.S.T. Principle Assessment
+
+My tests for the Order functionality mostly followed the F.I.R.S.T. principle, but with some areas for improvement:
+
+**Fast:**  
+✅ The tests run quickly without external dependencies.  
+✅ Using Mockito for the service tests prevents slow repository operations.
+
+**Independent:**  
+✅ Each test method is independent and doesn't rely on the state from other tests.  
+✅ The `@BeforeEach` method properly resets the state before each test.  
+⚠️ Some tests in `OrderRepositoryTest` might be affected by test order since the repository is reused.
+
+**Repeatable:**  
+✅ Tests use fixed data and don't depend on external systems.  
+✅ Consistent test data is created in the setup methods.  
+✅ No reliance on timing, network, or database state.
+
+**Self-validating:**  
+✅ All tests clearly assert their expectations.  
+✅ Each test has specific assertions for the behavior being tested.  
+⚠️ Some tests could benefit from more descriptive assertion messages.
+
+**Timely:**  
+✅ Most tests were written before implementation, following TDD.  
+⚠️ Some tests for edge cases may have been added after implementation.
+
+**Areas for improvement in future tests:**
+
+1. Ensure complete independence by creating fresh repositories for each test
+2. Add more descriptive assertion messages to clarify test failures
+3. Write more thorough edge case tests before implementation
+4. Consider property-based testing for input validation
+5. Add more integration tests between layers to complement unit tests
+6. Use test fixtures or factory methods to make test setup more readable
+
+Overall, my tests follow most of the F.I.R.S.T. principles well, but I can strengthen my testing practice by focusing on complete independence between tests and ensuring all tests are truly written before implementation.
