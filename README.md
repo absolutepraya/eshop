@@ -2,13 +2,7 @@
 
 ## Deployed Application URL
 
-#### Product List Page
-
-[https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/product/list](https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/product/list)
-
-#### Car List Page
-
-[https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/car/list](https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/car/list)
+**[https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/](https://musical-jennine-absolutepraya-ccf87b13.koyeb.app/)**
 
 ## Contents
 
