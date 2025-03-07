@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Payment Details</title>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.hero-section {
+				padding: 3rem 0;
+				background-color: #4e73df;
+				color: white;
+				margin-bottom: 2rem;
+			}
+			.card {
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+				margin-bottom: 1.5rem;
+			}
+			.card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+			}
+			.card-icon {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+				color: #4e73df;
+			}
+			.footer {
+				margin-top: 2rem;
+				padding: 1.5rem 0;
+				background-color: #f1f1f1;
+			}
+			.badge {
+				padding: 0.5rem 0.7rem;
+				font-size: 0.9rem;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="container">
+				<h1 class="display-4">Payment Details</h1>
+				<p class="lead">View your payment information</p>
+			</div>
+		</div>
+		
+		<!-- Main Content -->
+		<div class="container pb-5">
+			<div
+				th:if="${payment == null}"
+				class="alert alert-danger"
+			>
+				<i class="fas fa-exclamation-circle mr-2"></i>
+				Payment not found. Please check your payment ID.
+			</div>
+
+			<div
+				th:if="${payment != null}"
+				class="card"
+			>
+				<div class="card-header bg-primary text-white">
+					<h5 class="mb-0"><i class="fas fa-file-invoice-dollar mr-2"></i>Payment ID: <span th:text="${payment.id}"></span></h5>
+				</div>
+				<div class="card-body">
+					<div class="row mb-4">
+						<div class="col-md-6">
+							<p>
+								<strong><i class="fas fa-info-circle mr-2"></i>Status:</strong>
+								<span
+									th:if="${payment.status == 'PENDING'}"
+									class="badge badge-warning text-dark"
+									><i class="fas fa-clock mr-1"></i>Pending</span
+								>
+								<span
+									th:if="${payment.status == 'SUCCESS'}"
+									class="badge badge-success"
+									><i class="fas fa-check mr-1"></i>Success</span
+								>
+								<span
+									th:if="${payment.status == 'REJECTED'}"
+									class="badge badge-danger"
+									><i class="fas fa-times mr-1"></i>Rejected</span
+								>
+							</p>
+							<p>
+								<strong><i class="fas fa-credit-card mr-2"></i>Payment Method:</strong>
+								<span th:text="${payment.method}"></span>
+							</p>
+						</div>
+						<div class="col-md-6">
+							<p>
+								<strong><i class="fas fa-shopping-cart mr-2"></i>Order ID:</strong>
+								<span th:text="${payment.order.id}"></span>
+							</p>
+							<p>
+								<strong><i class="fas fa-user mr-2"></i>Customer:</strong>
+								<span th:text="${payment.order.author}"></span>
+							</p>
+						</div>
+					</div>
+
+					<h5 class="mt-4"><i class="fas fa-list-alt mr-2"></i>Payment Details:</h5>
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-light">
+								<tr>
+									<th>Field</th>
+									<th>Value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="entry : ${payment.paymentData}">
+									<td th:text="${entry.key}"></td>
+									<td th:text="${entry.value}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<h5 class="mt-4">Order Details:</h5>
+					<p>
+						<strong>Order Date:</strong>
+						<span
+							th:text="${#dates.format(new java.util.Date(payment.order.orderTime), 'dd-MM-yyyy HH:mm')}"
+						></span>
+					</p>
+					<p><strong><i class="fas fa-boxes mr-2"></i>Products:</strong></p>
+					<ul class="list-group">
+						<li
+							th:each="product : ${payment.order.products}"
+							class="list-group-item"
+						>
+							<i class="fas fa-box mr-2"></i>
+							<span th:text="${product.productName + ' x ' + product.productQuantity}"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="text-center mt-3">
+				<a
+					th:href="@{/payment/detail}"
+					class="btn btn-secondary mr-2"
+					><i class="fas fa-arrow-left mr-2"></i>Back</a
+				>
+				<a
+					th:href="@{/}"
+					class="btn btn-primary"
+					><i class="fas fa-home mr-2"></i>Home</a
+				>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+</html>
