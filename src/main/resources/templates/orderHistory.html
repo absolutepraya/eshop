@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Order History</title>
+		<link
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<h3 class="my-4">
+				Order History for <span th:text="${authorName}"></span>
+			</h3>
+
+			<div
+				th:if="${orders.empty}"
+				class="alert alert-info"
+			>
+				You don't have any orders yet.
+			</div>
+
+			<div th:unless="${orders.empty}">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Order ID</th>
+							<th>Date</th>
+							<th>Products</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="order : ${orders}">
+							<td th:text="${order.id}"></td>
+							<td
+								th:text="${#dates.format(new java.util.Date(order.orderTime), 'dd-MM-yyyy HH:mm')}"
+							></td>
+							<td>
+								<ul>
+									<li
+										th:each="product : ${order.products}"
+										th:text="${product.productName + ' x' + product.productQuantity}"
+									></li>
+								</ul>
+							</td>
+							<td th:text="${order.status}"></td>
+							<td>
+								<a
+									th:if="${order.status == 'WAITING_PAYMENT'}"
+									th:href="@{/order/pay/{id}(id=${order.id})}"
+									class="btn btn-sm btn-primary"
+									>Pay Now</a
+								>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<a
+				th:href="@{/order/history}"
+				class="btn btn-secondary"
+				>Back to History Form</a
+			>
+			<a
+				th:href="@{/order}"
+				class="btn btn-secondary"
+				>Back</a
+			>
+		</div>
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+			crossorigin="anonymous"
+		></script>
+	</body>
+</html>
