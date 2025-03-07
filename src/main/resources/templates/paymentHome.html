@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Payment Management</title>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.hero-section {
+				padding: 3rem 0;
+				background-color: #4e73df;
+				color: white;
+				margin-bottom: 2rem;
+			}
+			.card {
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+				margin-bottom: 1.5rem;
+			}
+			.card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+			}
+			.card-icon {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+				color: #4e73df;
+			}
+			.footer {
+				margin-top: 2rem;
+				padding: 1.5rem 0;
+				background-color: #f1f1f1;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="container">
+				<h1 class="display-4">Payment Management</h1>
+				<p class="lead">Welcome to the Payment Management System. Check and manage payments with ease.</p>
+			</div>
+		</div>
+		
+		<!-- Main Content -->
+		<div class="container pb-5">
+			<div class="row">
+				<div class="col-md-6 mb-4">
+					<div class="card text-center h-100">
+						<div class="card-body">
+							<i class="fas fa-search card-icon"></i>
+							<h5 class="card-title">Check Payment Status</h5>
+							<p class="card-text">
+								Enter a payment ID to check the status.
+							</p>
+							<a
+								th:href="@{/payment/detail}"
+								class="btn btn-primary"
+							><i class="fas fa-file-invoice-dollar mr-2"></i>Check Payment</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 mb-4">
+					<div class="card text-center h-100">
+						<div class="card-body">
+							<i class="fas fa-list-alt card-icon"></i>
+							<h5 class="card-title">Admin Payment List</h5>
+							<p class="card-text">
+								View and manage all payments in the system (Admin access).
+							</p>
+							<a
+								th:href="@{/payment/admin/list}"
+								class="btn btn-primary"
+							><i class="fas fa-cog mr-2"></i>Admin Panel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-center mt-3">
+				<a
+					th:href="@{/}"
+					class="btn btn-secondary"
+				><i class="fas fa-home mr-2"></i>Back to Home</a>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+</html>
