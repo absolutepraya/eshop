@@ -81,9 +81,9 @@ public class PaymentServiceImpl implements PaymentService {
         
         if (address == null || address.isEmpty() || deliveryFee == null || deliveryFee.isEmpty()) {
             setStatus(payment, "REJECTED");
-        } else {
-            setStatus(payment, "SUCCESS");
         }
+        // For valid COD payments, leave status as PENDING
+        // The status will be set to SUCCESS or REJECTED by admin later
     }
     
     // Validate voucher code according to requirements
