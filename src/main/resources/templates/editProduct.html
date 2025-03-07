@@ -5,67 +5,119 @@
 >
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Edit Product</title>
-		<link
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-			crossorigin="anonymous"
-		/>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.hero-section {
+				padding: 3rem 0;
+				background-color: #4e73df;
+				color: white;
+				margin-bottom: 2rem;
+			}
+			.card {
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+				margin-bottom: 1.5rem;
+				box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+			}
+			.card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+			}
+			.card-icon {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+				color: #4e73df;
+			}
+			.footer {
+				margin-top: 2rem;
+				padding: 1.5rem 0;
+				background-color: #f1f1f1;
+			}
+		</style>
 	</head>
 	<body>
-		<div class="container">
-			<h3>Edit Product</h3>
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="container">
+				<h1 class="display-4">Edit Product</h1>
+				<p class="lead">Update existing product information</p>
+			</div>
+		</div>
 
-			<form
-				th:action="@{/product/edit}"
-				th:object="${product}"
-				method="post"
-			>
-				<!-- Hidden input for productId -->
-				<input
-					type="hidden"
-					th:field="*{productId}"
-				/>
+		<div class="container pb-5">
+			<div class="row justify-content-center">
+				<div class="col-lg-8">
+					<div class="card">
+						<div class="card-header bg-primary text-white">
+							<h3 class="mb-0">Edit Product Information</h3>
+						</div>
+						<div class="card-body">
+							<form
+								th:action="@{/product/edit}"
+								th:object="${product}"
+								method="post"
+							>
+								<!-- Hidden input for productId -->
+								<input
+									type="hidden"
+									th:field="*{productId}"
+								/>
 
-				<div class="form-group">
-					<label for="nameInput">Name</label>
-					<input
-						th:field="*{productName}"
-						type="text"
-						class="form-control mb-4 col-4"
-						id="nameInput"
-						placeholder="Enter product's name"
-					/>
-					<div
-						class="text-danger"
-						th:if="${#fields.hasErrors('productName')}"
-						th:errors="*{productName}"
-					></div>
+								<div class="form-group">
+									<label for="nameInput">Product Name</label>
+									<input
+										th:field="*{productName}"
+										type="text"
+										class="form-control"
+										id="nameInput"
+										placeholder="Enter product's name"
+									/>
+									<div
+										class="text-danger"
+										th:if="${#fields.hasErrors('productName')}"
+										th:errors="*{productName}"
+									></div>
+								</div>
+
+								<div class="form-group">
+									<label for="quantityInput">Quantity</label>
+									<input
+										th:field="*{productQuantity}"
+										type="number"
+										class="form-control"
+										id="quantityInput"
+										placeholder="Enter product's quantity"
+									/>
+									<div
+										class="text-danger"
+										th:if="${#fields.hasErrors('productQuantity')}"
+										th:errors="*{productQuantity}"
+									></div>
+								</div>
+
+								<div class="text-right">
+									<a th:href="@{/product/list}" class="btn btn-secondary mr-2">
+										<i class="fas fa-times mr-1"></i>Cancel
+									</a>
+									<button type="submit" class="btn btn-primary">
+										<i class="fas fa-check mr-1"></i>Update
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
+			</div>
+		</div>
 
-				<div class="form-group">
-					<label for="quantityInput">Quantity</label>
-					<input
-						th:field="*{productQuantity}"
-						type="number"
-						class="form-control mb-4 col-4"
-						id="quantityInput"
-						placeholder="Enter product's quantity"
-					/>
-					<div
-						class="text-danger"
-						th:if="${#fields.hasErrors('productQuantity')}"
-						th:errors="*{productQuantity}"
-					></div>
-				</div>
-				<button
-					type="submit"
-					class="btn btn-primary"
-				>
-					Update
-				</button>
-				<a
-					th:href="@{/product/list}"
-					class="btn btn-secondary"
-					>Cancel
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+</html>

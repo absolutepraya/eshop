@@ -1,89 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+	lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+>
 	<head>
 		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<link
-			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-			rel="stylesheet"
-		/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Edit Car</title>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.hero-section {
+				padding: 3rem 0;
+				background-color: #4e73df;
+				color: white;
+				margin-bottom: 2rem;
+			}
+			.card {
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+				margin-bottom: 1.5rem;
+				box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+			}
+			.card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+			}
+			.card-icon {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+				color: #4e73df;
+			}
+			.footer {
+				margin-top: 2rem;
+				padding: 1.5rem 0;
+				background-color: #f1f1f1;
+			}
+		</style>
 	</head>
-	<body class="bg-gray-100">
-		<div class="container mx-auto mt-8">
-			<h1 class="text-3xl font-bold mb-4">Edit Car</h1>
-
-			<!-- Update form action to use the new endpoint -->
-			<form
-				th:action="@{/car/edit}"
-				method="post"
-				th:object="${car}"
-				class="max-w-md bg-white p-6 rounded-md shadow-md"
-			>
-				<input
-					type="hidden"
-					th:field="*{carId}"
-				/>
-				<div class="mb-4">
-					<label
-						for="carName"
-						class="block text-sm font-medium text-gray-600"
-						>Car Name</label
-					>
-					<input
-						type="text"
-						id="carName"
-						th:field="*{carName}"
-						name="carName"
-						th:value="${car.carName}"
-						class="mt-1 p-2 w-full border rounded-md"
-					/>
-				</div>
-
-				<div class="mb-4">
-					<label
-						for="carColor"
-						class="block text-sm font-medium text-gray-600"
-						>Car Color</label
-					>
-					<input
-						th:field="*{carColor}"
-						type="text"
-						id="carColor"
-						name="carColor"
-						th:value="${car.carColor}"
-						class="mt-1 p-2 w-full border rounded-md"
-					/>
-				</div>
-
-				<div class="mb-4">
-					<label
-						for="carQuantity"
-						class="block text-sm font-medium text-gray-600"
-						>Car Quantity</label
-					>
-					<input
-						th:field="*{carQuantity}"
-						type="number"
-						id="carQuantity"
-						name="carQuantity"
-						th:value="${car.carQuantity}"
-						class="mt-1 p-2 w-full border rounded-md"
-					/>
-				</div>
-
-				<div class="flex justify-end">
-					<button
-						type="submit"
-						class="bg-blue-500 text-white px-4 py-2 rounded-md"
-					>
-						Save Changes
-					</button>
-				</div>
-			</form>
+	<body>
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="container">
+				<h1 class="display-4">Edit Car</h1>
+				<p class="lead">Update existing car information</p>
+			</div>
 		</div>
+
+		<div class="container pb-5">
+			<div class="row justify-content-center">
+				<div class="col-lg-8">
+					<div class="card">
+						<div class="card-header bg-primary text-white">
+							<h3 class="mb-0">Edit Car Information</h3>
+						</div>
+						<div class="card-body">
+							<form
+								th:action="@{/car/edit}"
+								th:object="${car}"
+								method="post"
+							>
+								<!-- Hidden input for carId -->
+								<input
+									type="hidden"
+									th:field="*{carId}"
+								/>
+
+								<div class="form-group">
+									<label for="nameInput">Car Name</label>
+									<input
+										th:field="*{carName}"
+										type="text"
+										class="form-control"
+										id="nameInput"
+										placeholder="Enter car's name"
+									/>
+								</div>
+
+								<div class="form-group">
+									<label for="colorInput">Car Color</label>
+									<input
+										th:field="*{carColor}"
+										type="text"
+										class="form-control"
+										id="colorInput"
+										placeholder="Enter car's color"
+									/>
+								</div>
+
+								<div class="form-group">
+									<label for="quantityInput">Quantity</label>
+									<input
+										th:field="*{carQuantity}"
+										type="number"
+										class="form-control"
+										id="quantityInput"
+										placeholder="Enter car's quantity"
+									/>
+								</div>
+
+								<div class="text-right">
+									<a th:href="@{/car/list}" class="btn btn-secondary mr-2">
+										<i class="fas fa-times mr-1"></i>Cancel
+									</a>
+									<button type="submit" class="btn btn-primary">
+										<i class="fas fa-check mr-1"></i>Update
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	</body>
 </html>
