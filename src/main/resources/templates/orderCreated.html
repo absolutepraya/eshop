@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Order Created</title>
+		<link
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<div
+				class="alert alert-success my-4"
+				role="alert"
+			>
+				<h4 class="alert-heading">Order Created Successfully!</h4>
+				<p>Your order has been created and is waiting for payment.</p>
+			</div>
+
+			<div class="card mb-4">
+				<div class="card-header">
+					<h5 class="mb-0">Order Details</h5>
+				</div>
+				<div class="card-body">
+					<p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+					<p>
+						<strong>Author:</strong> <span th:text="${order.author}"></span>
+					</p>
+					<p>
+						<strong>Status:</strong> <span th:text="${order.status}"></span>
+					</p>
+					<p>
+						<strong>Order Time:</strong>
+						<span
+							th:text="${#dates.format(new java.util.Date(order.orderTime), 'yyyy-MM-dd HH:mm:ss')}"
+						></span>
+					</p>
+
+					<h6 class="mt-4">Products:</h6>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Product Name</th>
+								<th>Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="product : ${order.products}">
+								<td th:text="${product.name}"></td>
+								<td th:text="${product.quantity}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-between">
+				<a
+					th:href="@{/order/pay/{orderId}(orderId=${order.id})}"
+					class="btn btn-primary"
+					>Proceed to Payment</a
+				>
+				<a
+					th:href="@{/order/history}"
+					class="btn btn-secondary"
+					>View All Orders</a
+				>
+			</div>
+		</div>
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+			crossorigin="anonymous"
+		></script>
+	</body>
+</html>
