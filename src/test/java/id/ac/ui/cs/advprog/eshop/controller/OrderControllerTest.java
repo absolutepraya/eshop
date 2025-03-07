@@ -221,4 +221,81 @@ class OrderControllerTest {
 
         verify(paymentService, never()).addPayment(any(Order.class), anyString(), any(Map.class));
     }
+
+    @Test
+    void createOrder_withNumberFormatException_shouldReturnErrorMessage() throws Exception {
+        when(productService.findById("prod-1")).thenReturn(product1);
+        when(productService.findAll()).thenReturn(products);
+
+        mockMvc.perform(post("/order/create")
+                .param("authorName", "testAuthor")
+                .param("selectedProducts", "prod-1")
+                .param("quantity-prod-1", "not-a-number")) // Will cause NumberFormatException
+                .andExpect(status().isOk())
+                .andExpect(view().name("createOrder"))
+                .andExpect(model().attributeExists("errorMessage"))
+                .andExpect(model().attributeExists("products"));
+
+        verify(orderService, never()).createOrder(any(Order.class));
+    }
+
+    @Test
+    void orderHistoryPage_withEmptyAuthorName_shouldReturnHistoryForm() throws Exception {
+        mockMvc.perform(get("/order/history")
+                .param("authorName", "  ")) // Empty string with spaces
+                .andExpect(status().isOk())
+                .andExpect(view().name("historyForm"));
+                
+        verify(orderService, never()).findAllByAuthor(anyString());
+    }
+
+    @Test
+    void processPayment_withCODMethod_shouldReturnConfirmationPage() throws Exception {
+        when(orderService.findById("order-1")).thenReturn(testOrder);
+        when(paymentService.addPayment(any(Order.class), anyString(), any(Map.class))).thenReturn(testPayment);
+
+        mockMvc.perform(post("/order/pay/{orderId}", "order-1")
+                .param("paymentMethod", "COD") // Testing the other valid payment method
+                .param("data", "value"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("paymentConfirmation"))
+                .andExpect(model().attributeExists("payment"))
+                .andExpect(model().attributeExists("order"));
+
+        verify(paymentService, times(1)).addPayment(any(Order.class), eq("COD"), any(Map.class));
+    }
+
+@Test
+void createOrder_withEmptyQuantityParam_shouldHandleErrors() throws Exception {
+    when(productService.findById("prod-1")).thenReturn(product1);
+    when(productService.findAll()).thenReturn(products);
+
+    // Testing with an empty quantity parameter
+    mockMvc.perform(post("/order/create")
+            .param("authorName", "testAuthor")
+            .param("selectedProducts", "prod-1")
+            .param("quantity-prod-1", ""))  // Empty but present
+            .andExpect(status().isOk())
+            .andExpect(view().name("createOrder"))
+            .andExpect(model().attributeExists("products"))
+            .andExpect(model().attributeExists("errorMessage"));
+
+    verify(orderService, never()).createOrder(any(Order.class));
+}
+
+    @Test
+    void createOrder_withEmptySelectedProducts_shouldStillWork() throws Exception {
+        when(productService.findAll()).thenReturn(products);
+        
+        // This tests when selectedProducts is provided but is an empty list
+        mockMvc.perform(post("/order/create")
+                .param("authorName", "testAuthor")
+                .param("selectedProducts", ""))  // Empty selected product
+                .andExpect(status().isOk())
+                .andExpect(view().name("createOrder"))
+                .andExpect(model().attributeExists("errorMessage"))
+                .andExpect(model().attributeExists("products"));
+                
+        verify(orderService, never()).createOrder(any(Order.class));
+    }
 }

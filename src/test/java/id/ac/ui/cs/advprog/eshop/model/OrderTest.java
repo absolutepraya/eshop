@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 
 public class OrderTest {
@@ -88,5 +92,67 @@ public class OrderTest {
         assertThrows(IllegalArgumentException.class, () -> {
             order.setStatus("MEOW");
         });
+    }
+
+    @Test
+    void testOrderBuilderWithAllFields() {
+        Order order = Order.builder()
+                .id("568a4f50-0b93-4d1b-8826-7bebc93f4a37")
+                .products(this.products)
+                .orderTime(1708560000L)
+                .author("Safira Sudrajat")
+                .status(OrderStatus.WAITING_PAYMENT.getValue())
+                .build();
+        
+        assertNotNull(order);
+        assertEquals("568a4f50-0b93-4d1b-8826-7bebc93f4a37", order.getId());
+        assertSame(this.products, order.getProducts());
+        assertEquals(1708560000L, order.getOrderTime());
+        assertEquals("Safira Sudrajat", order.getAuthor());
+        assertEquals(OrderStatus.WAITING_PAYMENT.getValue(), order.getStatus());
+    }
+    
+    @Test
+    void testOrderBuilderWithDifferentStatus() {
+        Order order = Order.builder()
+                .id("568a4f50-0b93-4d1b-8826-7bebc93f4a37")
+                .products(this.products)
+                .orderTime(1708560000L)
+                .author("Safira Sudrajat")
+                .status(OrderStatus.SUCCESS.getValue())
+                .build();
+        
+        assertNotNull(order);
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
+    }
+    
+    @Test
+    void testOrderBuilderWithEmptyId() {
+        Order order = Order.builder()
+                .products(this.products)
+                .orderTime(1708560000L)
+                .author("Safira Sudrajat")
+                .status(OrderStatus.WAITING_PAYMENT.getValue())
+                .build();
+        
+        assertNotNull(order);
+        assertNull(order.getId());
+        assertSame(this.products, order.getProducts());
+        assertEquals("Safira Sudrajat", order.getAuthor());
+    }
+    
+    @Test
+    void testOrderBuilderToString() {
+        Order.OrderBuilder builder = Order.builder()
+                .id("568a4f50-0b93-4d1b-8826-7bebc93f4a37")
+                .products(this.products)
+                .orderTime(1708560000L)
+                .author("Safira Sudrajat")
+                .status(OrderStatus.WAITING_PAYMENT.getValue());
+                
+        String builderString = builder.toString();
+        assertNotNull(builderString);
+        assertTrue(builderString.contains("568a4f50-0b93-4d1b-8826-7bebc93f4a37"));
+        assertTrue(builderString.contains("Safira Sudrajat"));
     }
 }

@@ -260,4 +260,101 @@ class PaymentServiceImplTest {
         verify(paymentRepository, times(2)).save(any(Payment.class));
         verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
     }
+
+    @Test
+    void testAddPaymentWithUnknownMethod() {
+        Map<String, String> paymentData = new HashMap<>();
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "UNKNOWN_METHOD", paymentData);
+        
+        assertEquals("UNKNOWN_METHOD", result.getMethod());
+        // Should be PENDING by default since no specific processing is done
+        assertEquals("PENDING", result.getStatus());
+        verify(paymentRepository, times(1)).save(any(Payment.class));
+        verify(orderService, never()).updateStatus(anyString(), anyString());
+    }
+
+    @Test
+    void testSetStatusToPending() {
+        Payment payment = payments.get(0);
+        
+        when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
+        
+        Payment result = paymentService.setStatus(payment, "PENDING");
+        
+        assertEquals("PENDING", result.getStatus());
+        // No order status update should happen for PENDING
+        verify(orderService, never()).updateStatus(anyString(), anyString());
+    }
+
+    @Test
+    void testNullVoucherCode() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", null);
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "VOUCHER", paymentData);
+        
+        assertEquals("REJECTED", result.getStatus());
+        verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
+    }
+
+    @Test
+    void testCODWithNullAddress() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("address", null);
+        paymentData.put("deliveryFee", "10000");
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "COD", paymentData);
+        
+        assertEquals("REJECTED", result.getStatus());
+        verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
+    }
+
+    @Test
+    void testCODWithEmptyAddress() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("address", "");
+        paymentData.put("deliveryFee", "10000");
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "COD", paymentData);
+        
+        assertEquals("REJECTED", result.getStatus());
+        verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
+    }
+
+    @Test
+    void testCODWithNullDeliveryFee() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("address", "Test Address");
+        paymentData.put("deliveryFee", null);
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "COD", paymentData);
+        
+        assertEquals("REJECTED", result.getStatus());
+        verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
+    }
+
+    @Test
+    void testCODWithEmptyDeliveryFee() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("address", "Test Address");
+        paymentData.put("deliveryFee", "");
+        
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Payment result = paymentService.addPayment(testOrder, "COD", paymentData);
+        
+        assertEquals("REJECTED", result.getStatus());
+        verify(orderService, times(1)).updateStatus(eq(testOrder.getId()), eq("FAILED"));
+    }
 }
